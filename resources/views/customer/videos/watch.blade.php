@@ -27,10 +27,26 @@
         {{-- Video Player --}}
         <div class="bg-white shadow sm:rounded-lg overflow-hidden">
             <div class="aspect-video bg-black">
-                <video id="videoPlayer" class="w-full h-full" controls controlsList="nodownload">
-                    <source src="{{ route('customer.videos.stream', $video) }}" type="video/mp4">
-                    Browser Anda tidak mendukung tag video.
-                </video>
+                @if ($video->isYoutube())
+                    {{-- YouTube Embed --}}
+                    <iframe id="videoPlayer" class="w-full h-full" src="{{ $video->getYoutubeEmbedUrl() }}"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                @elseif ($video->external_url)
+                    {{-- External Video URL --}}
+                    <video id="videoPlayer" class="w-full h-full" controls controlsList="nodownload">
+                        <source src="{{ $video->external_url }}" type="video/mp4">
+                        Browser Anda tidak mendukung tag video.
+                    </video>
+                @else
+                    {{-- Local Video File --}}
+                    <video id="videoPlayer" class="w-full h-full" controls controlsList="nodownload">
+                        <source src="{{ route('customer.videos.stream', $video) }}" type="video/mp4">
+                        Browser Anda tidak mendukung tag video.
+                    </video>
+                @endif
             </div>
         </div>
 
@@ -82,11 +98,12 @@
     </div>
 
     <script>
-        const video = document.getElementById('videoPlayer');
+        const videoPlayer = document.getElementById('videoPlayer');
         const remainingTimeEl = document.getElementById('remainingTime');
         const warningAlert = document.getElementById('warningAlert');
         const warningTime = document.getElementById('warningTime');
         const endTime = new Date("{{ $activeAccess->end_at->toIso8601String() }}").getTime();
+        const isYoutube = {{ $video->isYoutube() ? 'true' : 'false' }};
 
         // Format waktu ke format jam:menit:detik atau menit:detik
         function formatTime(milliseconds) {
@@ -117,8 +134,11 @@
                 remainingTimeEl.classList.remove('text-blue-600');
                 remainingTimeEl.classList.add('text-red-600');
 
-                video.pause();
-                video.src = '';
+                // Untuk video HTML5, pause dan clear source
+                if (!isYoutube && videoPlayer.tagName === 'VIDEO') {
+                    videoPlayer.pause();
+                    videoPlayer.src = '';
+                }
 
                 alert('⏰ Waktu akses video Anda telah habis. Anda akan diarahkan ke dashboard.');
                 window.location.href = '{{ route('customer.videos.index') }}';
@@ -146,28 +166,31 @@
         updateCountdown(); // Update langsung saat load
         const countdownInterval = setInterval(updateCountdown, 1000);
 
-        // Prevent right-click pada video
-        video.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // Prevent video playback jika access expired
-        video.addEventListener('play', function() {
-            const now = new Date().getTime();
-            const timeLeft = endTime - now;
-
-            if (timeLeft <= 0) {
-                video.pause();
-                alert('⏰ Waktu akses Anda telah habis.');
-            }
-        });
-
-        // Warning saat user mau close tab/browser
-        window.addEventListener('beforeunload', function(e) {
-            if (!video.paused) {
+        // Event listeners untuk video HTML5 (tidak untuk YouTube iframe)
+        if (!isYoutube && videoPlayer.tagName === 'VIDEO') {
+            // Prevent right-click pada video
+            videoPlayer.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
-                e.returnValue = '';
-            }
-        });
+            });
+
+            // Prevent video playback jika access expired
+            videoPlayer.addEventListener('play', function() {
+                const now = new Date().getTime();
+                const timeLeft = endTime - now;
+
+                if (timeLeft <= 0) {
+                    videoPlayer.pause();
+                    alert('⏰ Waktu akses Anda telah habis.');
+                }
+            });
+
+            // Warning saat user mau close tab/browser
+            window.addEventListener('beforeunload', function(e) {
+                if (!videoPlayer.paused) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+        }
     </script>
 </x-app-layout>

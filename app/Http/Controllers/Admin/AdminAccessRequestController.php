@@ -125,6 +125,9 @@ class AdminAccessRequestController extends Controller
             ->with('success', 'Request akses berhasil ditolak.');
     }
 
+    /**
+     * Bulk approve for multiple access requests
+     */
     public function bulkApprove(Request $request)
     {
         $request->validate([

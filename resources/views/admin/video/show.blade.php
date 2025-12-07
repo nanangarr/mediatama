@@ -77,7 +77,7 @@
                         <p class="mt-1 text-base text-gray-900 break-all">
                             {{ $video->isExternal() ? $video->external_url : $video->storage_path }}
                         </p>
-                        @if ($video->isExternal() && $video->is_external_secured)
+                        {{-- @if ($video->isExternal() && $video->is_external_secured)
                             <span class="inline-flex items-center mt-1 text-sm text-amber-600">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -85,7 +85,7 @@
                                 </svg>
                                 URL Dilindungi
                             </span>
-                        @endif
+                        @endif --}}
                     </div>
 
                     {{-- Tanggal Upload --}}

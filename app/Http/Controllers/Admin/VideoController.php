@@ -72,10 +72,10 @@ class VideoController extends Controller
         if ($request->external_url) {
             $data['external_url'] = $request->external_url;
 
-            // Check if URL is secured (contains signature or token patterns)
-            $isSecured = $this->checkUrlSecurity($request->external_url);
-            $data['is_external_secured'] = $isSecured;
-            $data['external_security_checked_at'] = now();
+            // // Check if URL is secured (contains signature or token patterns)
+            // $isSecured = $this->checkUrlSecurity($request->external_url);
+            // $data['is_external_secured'] = $isSecured;
+            // $data['external_security_checked_at'] = now();
 
             // Try to get duration if possible (optional)
             $duration = $this->getExternalVideoDuration($request->external_url);
@@ -149,10 +149,10 @@ class VideoController extends Controller
             $data['external_url'] = $request->external_url;
             $data['storage_path'] = null; // Clear storage path if using external URL
 
-            // Check if URL is secured
-            $isSecured = $this->checkUrlSecurity($request->external_url);
-            $data['is_external_secured'] = $isSecured;
-            $data['external_security_checked_at'] = now();
+            // // Check if URL is secured
+            // $isSecured = $this->checkUrlSecurity($request->external_url);
+            // $data['is_external_secured'] = $isSecured;
+            // $data['external_security_checked_at'] = now();
 
             // Try to get duration
             $duration = $this->getExternalVideoDuration($request->external_url);
@@ -228,27 +228,27 @@ class VideoController extends Controller
     /**
      * Check if external URL has security features (signed URL, tokens, etc.)
      */
-    private function checkUrlSecurity(string $url): bool
-    {
-        // Check for common signature/token patterns
-        $securityPatterns = [
-            '/signature=/i',
-            '/token=/i',
-            '/key=/i',
-            '/auth=/i',
-            '/sign=/i',
-            '/expires=/i',
-            '/sig=/i',
-        ];
+    // private function checkUrlSecurity(string $url): bool
+    // {
+    //     // Check for common signature/token patterns
+    //     $securityPatterns = [
+    //         '/signature=/i',
+    //         '/token=/i',
+    //         '/key=/i',
+    //         '/auth=/i',
+    //         '/sign=/i',
+    //         '/expires=/i',
+    //         '/sig=/i',
+    //     ];
 
-        foreach ($securityPatterns as $pattern) {
-            if (preg_match($pattern, $url)) {
-                return true;
-            }
-        }
+    //     foreach ($securityPatterns as $pattern) {
+    //         if (preg_match($pattern, $url)) {
+    //             return true;
+    //         }
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     /**
      * Try to get duration from external video URL (optional, may not always work)
