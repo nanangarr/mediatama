@@ -11,20 +11,6 @@
             @if (auth()->check() && auth()->user()->hasRole('admin'))
                 <a href="{{ route('admin.customers.index') }}"
                     class="block rounded-lg px-3 py-2 text-sm font-medium
-                   {{ request()->routeIs('admin.customers.index') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                    Dashboard
-                </a>
-            @else
-                <a href="{{ route('home') }}"
-                    class="block rounded-lg px-3 py-2 text-sm font-medium
-                   {{ request()->routeIs('home') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                    Dashboard
-                </a>
-            @endif
-
-            @if (auth()->check() && auth()->user()->hasRole('admin'))
-                <a href="{{ route('admin.customers.index') }}"
-                    class="block rounded-lg px-3 py-2 text-sm font-medium
                    {{ request()->routeIs('admin.customers.*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
                     Customer
                 </a>
@@ -40,14 +26,23 @@
                    {{ request()->routeIs('admin.access-requests.*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
                     Request Akses
                 </a>
+            @else
+                <a href="{{ route('home') }}"
+                    class="block rounded-lg px-3 py-2 text-sm font-medium
+                   {{ request()->routeIs('home') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                    All Videos
+                </a>
             @endif
 
+            {{-- @if (auth()->check() && auth()->user()->hasRole('admin'))
+            @endif --}}
+
             @if (auth()->check() && auth()->user()->hasRole('customer'))
-                <a href="{{ route('customer.videos.index') }}"
+                {{-- <a href="{{ route('customer.videos.index') }}"
                     class="block rounded-lg px-3 py-2 text-sm font-medium
                    {{ request()->routeIs('customer.videos.*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
                     My Videos
-                </a>
+                </a> --}}
 
                 <a href="{{ route('customer.access-requests.index') }}"
                     class="block rounded-lg px-3 py-2 text-sm font-medium
@@ -86,21 +81,19 @@
             <div class="flex-1 px-3 py-4 space-y-1">
                 @if (auth()->check() && auth()->user()->hasRole('admin'))
                     <a href="{{ route('admin.customers.index') }}"
-                        class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Dashboard</a>
-                @else
-                    <a href="{{ route('home') }}"
-                        class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Dashboard</a>
-                @endif
-
-                @if (auth()->check() && auth()->user()->hasRole('admin'))
-                    <a href="{{ route('admin.customers.index') }}"
                         class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Customer</a>
                     <a href="{{ route('admin.videos.index') }}"
                         class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Video</a>
                     <a href="{{ route('admin.access-requests.index') }}"
                         class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Request
                         Akses</a>
+                @else
+                    <a href="{{ route('home') }}"
+                        class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">Dashboard</a>
                 @endif
+
+                {{-- @if (auth()->check() && auth()->user()->hasRole('admin'))
+                @endif --}}
 
                 @if (auth()->check() && auth()->user()->hasRole('customer'))
                     <a href="{{ route('customer.videos.index') }}"

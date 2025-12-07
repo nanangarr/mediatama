@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\VideoController;
@@ -10,7 +11,13 @@ use App\Http\Controllers\Admin\AdminAccessRequestController;
 Route::get('/', [VideoController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
-    return redirect()->route('customer.videos.index');
+    $user = Auth::user();
+
+    if ($user && method_exists($user, 'hasRole') && $user->hasRole('admin')) {
+        return redirect()->route('admin.access-requests.index');
+    }
+
+    return redirect()->route('customer.access-requests.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Public routes - no authentication required

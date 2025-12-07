@@ -6,7 +6,7 @@
                 <div class="text-sm text-gray-600">
                     Sisa waktu: <span id="remainingTime" class="font-semibold text-blue-600">Menghitung...</span>
                 </div>
-                <a href="{{ route('customer.videos.index') }}"
+                <a href="{{ route('customer.access-requests.index') }}"
                     class="inline-flex items-center rounded-lg bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-200">
                     ← Kembali
                 </a>
@@ -141,7 +141,7 @@
                 }
 
                 alert('⏰ Waktu akses video Anda telah habis. Anda akan diarahkan ke dashboard.');
-                window.location.href = '{{ route('customer.videos.index') }}';
+                window.location.href = '{{ route('customer.access-requests.index') }}';
                 return;
             }
 
